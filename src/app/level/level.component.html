@@ -1,0 +1,13 @@
+<ul class="collection">
+  <li class="collection-item avatar">
+    <img width="100" src="./assets/images/chewbacca.png" alt="" class="circle">
+    <span class="title">Chewbacca Player</span>
+  </li>
+</ul>
+<form [formGroup]="levelForm" (ngSubmit)="onSubmit()">
+  <h3 class="header">Level </h3>
+  <p class="range-field">
+    <input formControlName="range" type="range" id="test5" min="0" max="100" />
+  </p>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

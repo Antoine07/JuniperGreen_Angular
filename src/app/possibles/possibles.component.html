@@ -1,0 +1,9 @@
+<ul class="block">
+  <p>
+    <a (click)="solution()" class="waves-effect waves-light btn">Voir les valeurs possibles ?</a>
+  </p>
+  <h2 class="title-divisor">
+    <small *ngIf="message">{{ message }}</small>
+  </h2>
+  <li *ngFor="let number of possibles" [ngClass]="{'special': isValid(number)}" (click)="selectChoice(number)">{{ number }}</li>
+</ul>

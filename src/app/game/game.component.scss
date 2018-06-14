@@ -1,0 +1,20 @@
+
+.block {
+    li {
+        position: relative;
+        left: 0;
+        background-color: #b2dfdb ;
+        margin: .5em;
+        padding: .3em 0;
+        height: 1.6em;
+        width: 2em;
+        border-radius: 4px;
+        display: inline-block;
+        text-align: center;
+        line-height: 0.7em;
+      }
+  }
+
+  .title-divisor, .title-multiple{ font-size: 0.8em ;}
+
+  .title-choice-computer{font-size: 1em ; }

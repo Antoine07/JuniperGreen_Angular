@@ -1,0 +1,8 @@
+<div *ngIf="Players">
+  <ul>
+    <li *ngFor="let player of Players"> {{ player | json }}</li>
+  </ul>
+  <button class="btn" (click)="replay()"> Rejouer ?</button>
+</div>
+
+{{ Players | json }}

@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <div class="col s12 m8">
+      <h1 class="title-choice-computer">Vous devez choisir une valeur dans l'intervalle 2, et {{ Max }}</h1>
+      <h2 class="title-choice-computer">Choix de l'ordinateur : {{ Players.player1.choice }}</h2>
+      <div *ngIf="message">
+        <p>{{ message }}</p>
+      </div>
+      <form [formGroup]="choiceForm" #formDir="ngForm" (ngSubmit)="onSubmitChoice()">
+        <div>
+          <div class="form-group">
+            <label for="choice">Proposez un nombre :</label>
+            <input id="choice" formControlName="choice" required>
+            <div *ngIf="choice.invalid && (choice.dirty || choice.touched)" class="alert alert-danger">
+              <div *ngIf="choice.errors.required">
+                choice is required.
+              </div>
+              <div *ngIf="choice.errors.maxlength">
+                Choisissez un nombre supérieur à 1 et strictement inférieur à 100
+              </div>
+              <div *ngIf="choice.errors.pattern">
+                Seul des nombres sont permis
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-default" [disabled]="choiceForm.invalid">Submit</button>
+          <button type="button" class="btn btn-default" (click)="reset()">Reset</button>
+        </div>
+      </form>
+      <!-- Liste des valeurs déjà jouées -->
+      <ul class="block">
+        <h2 class="title-multiple">
+          <small>Déjà joué :</small>
+        </h2>
+        <li *ngFor="let num of choices">{{ num }}</li>
+      </ul>
+    </div>
+    <div class="col s12 m4">
+      <app-possibles [valid]="valid" [possibles]="possibles" [choices]="choices" (choice)="onChoice($event)"></app-possibles>
+    </div>
+  </div>
+  <!-- #row -->
+</div>
+<!-- #container -->
