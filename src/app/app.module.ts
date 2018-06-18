@@ -12,9 +12,13 @@ import { RulesComponent } from './rules/rules.component';
 import { JunipergreenService } from './junipergreen.service';
 import { ControlValidatorDirective } from './shared/control-names.directive';
 import { PossiblesComponent } from './possibles/possibles.component'
-import { StorageNumberService } from './storage-number.service';
 import { StatusComponent } from './status/status.component';
 import { LevelComponent } from './level/level.component';
+
+import { JuniperDatabaseService } from './juniper-database.service';
+
+// http client
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,8 +36,9 @@ import { LevelComponent } from './level/level.component';
     AppRoutingModule,
     ReactiveFormsModule, // <-- #2 add to @NgModule imports
     BrowserAnimationsModule,
+    HttpClientModule
   ],
-  providers: [JunipergreenService, StorageNumberService],
+  providers: [JunipergreenService, JuniperDatabaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

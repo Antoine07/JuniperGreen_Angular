@@ -1,0 +1,33 @@
+{
+    "rooms": [
+        {
+            "users": [
+                {
+                    "key" : 0 ,
+                    "name": "Chewbaca",
+                    "score": "0",
+                    "status": "0",
+                    "choices": [
+                        0
+                    ],
+                    "avatar": "",
+                    "created": ""
+                },
+                {
+                    "key" : 1,
+                    "name": "Alan",
+                    "score": "0",
+                    "status": "0",
+                    "choices": [
+                        0
+                    ],
+                    "avatar": "",
+                    "created": ""
+                }
+            ],
+            "informations": {
+                "tour": 0
+            }
+        }
+    ]
+}

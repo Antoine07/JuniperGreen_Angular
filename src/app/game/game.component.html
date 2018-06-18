@@ -2,14 +2,15 @@
   <div class="row">
     <div class="col s12 m8">
       <h1 class="title-choice-computer">Vous devez choisir une valeur dans l'intervalle 2, et {{ Max }}</h1>
-      <h2 class="title-choice-computer">Choix de l'ordinateur : {{ Players.player1.choice }}</h2>
+      <h2 class="title-choice-computer">Choix de {{ player1?.name }} : {{ player1?.choice }}</h2>
+
       <div *ngIf="message">
         <p>{{ message }}</p>
       </div>
       <form [formGroup]="choiceForm" #formDir="ngForm" (ngSubmit)="onSubmitChoice()">
         <div>
           <div class="form-group">
-            <label for="choice">Proposez un nombre :</label>
+            <label for="choice">Proposez un multiple ou un diviseur :</label>
             <input id="choice" formControlName="choice" required>
             <div *ngIf="choice.invalid && (choice.dirty || choice.touched)" class="alert alert-danger">
               <div *ngIf="choice.errors.required">

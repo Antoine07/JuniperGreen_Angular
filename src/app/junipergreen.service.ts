@@ -61,7 +61,6 @@ export class JunipergreenService {
 
     let divisors = this.possibleDivisor(choice);
     let multiples = this.possibleMultiple(choice);
-
     let union = divisors.concat(multiples);
 
     return union.filter((num, pos) => { return union.indexOf(num) == pos; })

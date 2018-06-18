@@ -10,7 +10,8 @@ import { JunipergreenService } from '../junipergreen.service';
 })
 export class StatusComponent implements OnInit {
 
-  Players: any;
+  player1 : User;
+  player2 : User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -18,11 +19,13 @@ export class StatusComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.Players = localStorage.getItem('storage') ;
+
+    // this.player1 = new User(this.players.player1.name, this.players.player1.score);
+    // this.player2 = new User(this.players.player2.name, this.players.player2.score);
 
   }
 
-  replay(){
+  replay() {
     localStorage.clear();
 
     return this.router.navigate(['/game']);

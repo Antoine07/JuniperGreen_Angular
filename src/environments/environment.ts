@@ -5,7 +5,12 @@
 
 export const environment = {
   production: false,
-  max: 200,
-  maxgamers: 2,
-  debug : true
+  firebase: {
+    apiKey: "AIzaSyDtcr76868Cnl-kk6cTqVLQXT8-qgJNDac",
+    authDomain: "game-f1dd7.firebaseapp.com",
+    databaseURL: "https://game-f1dd7.firebaseio.com",
+    projectId: "game-f1dd7",
+    storageBucket: "game-f1dd7.appspot.com",
+    messagingSenderId: "581757039359"
+  }
 };
