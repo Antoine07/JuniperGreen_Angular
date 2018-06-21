@@ -9,11 +9,11 @@ export class StorageNumberService {
     localStorage.clear();
   }
 
-  setValues(data : any, key: string) {
+  setValue(data : {}, key: string) {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
-  getValues(key: string) {
+  getValue(key: string) {
     return JSON.parse(localStorage.getItem(key));
   }
 

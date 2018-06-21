@@ -1,84 +1,74 @@
 import { Injectable } from '@angular/core';
 
 import { UserJSON, User } from './init';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { HttpClient } from '@angular/common/http';
-
-import { environment } from '../environments/environment';
 import * as firebase from 'firebase';
 
 @Injectable()
 export class JuniperDatabaseService {
 
-  users: User[] = [];
-  usersSubject = new Subject<User[]>();
-
-  emitUsers() {
-    this.usersSubject.next(this.users);
-  }
-
-  constructor(private http: HttpClient) {
-
-    firebase.initializeApp(environment.firebase);
-
-  }
+  constructor() { }
 
   getUserJSON(user: UserJSON): UserJSON {
     return {
-      key: user.key,
-      name: user.name,
+      pseudo: user.pseudo,
       score: user.score,
-      created: user.created.toString(),
       choices: user.choices,
-      avatar: user.avatar,
       status: user.status
     };
   }
 
-  getUsers(room: number | string): Observable<User> {
+  getUsers(uid: string): Observable<User> {
 
     return new Observable(observer => {
-      let ref = firebase.database().ref("rooms/" + room + "/users").orderByKey()
+      let ref = firebase.database().ref("/players/" + uid)
         .once("value")
-        .then(function (user) {
-          observer.next(user.val());
+        .then((data) => {
+          observer.next(data.val());
         });
     });
   }
 
-  getUser(room: number | string, id: number): Observable<User> {
+  /**
+   * 
+   * @param key 
+   * @param id 
+   * @description id offset 0 user and 1 chewbaca
+   */
+  getUser(key: number | string, id: number): Observable<User> {
 
     return new Observable(
       (observer) => {
-        firebase.database().ref('/rooms/' + room + '/users/' + id).once('value').then(
+        firebase.database().ref('/rooms/' + key + '/users/').once('value').then(
           (data) => {
-            observer.next(data.val());
+            observer.next(data.val()[id]);
           }, (error) => {
-            console.error('error getSingleUser')
+            console.error('error getUser')
           }
         );
       }
     );
   }
 
-  updateUser(room: number, user: User) {
-    let userJson: UserJSON = new UserJSON;
+  updateUser(uid: string, user: User) {
 
-    userJson.name = user.name;
-    userJson.score = user.score;
-    userJson.status = user.status;
-    userJson.choices = user.choices();
+    let User = { 'score': user.score, 'status': user.status, 'choices': user.choices() };
+    let Data;
 
-    console.log(user.key)
+    if (user.pseudo == 'chewbaca') {
+      Data = {
+        'computer': User
+      }
+    } else {
+      Data = { 'user': User }
+    }
 
-    firebase.database().ref().child('/rooms/' + room + '/users/' + user.key)
-      .update(userJson);
-  }
+    let ref = firebase.database().ref('/players/' + uid);
+    ref.update(Data);
 
-  updateInformation(room: number, tour: number) {
-
-    firebase.database().ref().child('/rooms/' + room + '/informations/')
-      .update({ 'tour': tour });
+    let information = firebase.database().ref('/players/' + uid + '/information/tour').transaction(tour => {
+      return (tour || 0) + 1;
+    });
   }
 }

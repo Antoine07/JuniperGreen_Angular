@@ -4,8 +4,9 @@ import { FormControl } from '@angular/forms';
 import { FormGroup, Validators } from '@angular/forms';
 
 import { User, Max } from '../init';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { JuniperDatabaseService } from '../juniper-database.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-game',
@@ -16,65 +17,64 @@ export class GameComponent implements OnInit {
 
   choiceForm: FormGroup;
   possibles: Array<number> = [];
-  valid: Array<number>;
+  valid: Array<number> = [];
+  choices : Array<number> = [] ;
   message: string;
 
-  player1: User;
-  player2: User;
-
-  tour: number = 0;
+  user: User;
+  chewbaca: User;
 
   Max: number; // information sur l'intervalle des valeurs à jouer
+  users$;  
 
-  choices: Array<number> = [];
-
-  users$;
+  uid: string; // uid de l'utilisateur connecté => room 
 
   constructor(
     private junipergreenService: JunipergreenService,
     private router: Router,
+    private route: ActivatedRoute,
     private database: JuniperDatabaseService
-  ) { }
+  ) {
+
+    this.uid = firebase.auth().currentUser.uid;
+  }
 
   ngOnInit() {
     this.createForm();
-    this.Max = Max;
 
-    this.users$ = this.database.getUsers(0).subscribe(
-      user => {
-        // hydratation 
-        this.player1 = new User(this.database.getUserJSON(user[0]));
-        this.player2 = new User(this.database.getUserJSON(user[1]));
+    this.users$ = this.database.getUsers(this.uid).subscribe(
+      data => {
 
-        this.player1.choice = this.junipergreenService.choice(0); // on mémorise son choix
+        this.user = new User(data['user']);
+        this.chewbaca = new User(data['computer']);
 
-        this.junipergreenService.remove(this.player1.choice);
+        const choice = this.junipergreenService.choice(0); // on mémorise son choix
+
+        this.junipergreenService.remove(choice);
 
         // Quelles seront les valeurs possibles pour le prochain tour, valeurs à cachées 
-        this.valid = this.junipergreenService.valid(this.player1.choice);
+        this.valid = this.junipergreenService.valid(choice);
 
         // On place la valeur déjà jouée dans la liste choices
-        this.choices.push(this.player1.choice);
+        this.choices.push(choice);
 
-        this.tour++;
-
-        console.log(this.player1.key)
-
-        this.database.updateUser(0, this.player1);
-        // this.database.updateInformation(0, this.tour);
+        this.chewbaca.choice = choice ;
 
         // Si il n'y a pas de possibilité alors Chewbaca gagne tout de suite 
         if (this.valid.length == 0) {
 
           // faire persisté les données et faire une redirection 
 
-          this.player1.status = 1;
-          this.player1.score = 100;
+          this.chewbaca.status = 1;
+          this.chewbaca.score += 100;
 
-          this.database.updateUser(0, this.player1);
+          this.database.updateUser(this.uid, this.chewbaca);
 
           return this.redirectStatus();
         }
+
+        // dans le cas où il ne gagne pas on continue
+        this.database.updateUser(this.uid, this.chewbaca);
 
         // on place les nombres pour le joueur sur la colonne de gauche pour lui faciliter l'insertion d'un choix
         this.possibles = this.junipergreenService.Possibles;
@@ -109,11 +109,10 @@ export class GameComponent implements OnInit {
       this.choices.push(choice); // valeur déjà joué
       this.junipergreenService.remove(choice);
 
-      this.player2.score += 1; // on incrémente son score
-      this.player2.choice = choice; // On mémorise ses choix
+      this.user.score += 1; // on incrémente son score
+      this.user.choice = choice; // On mémorise ses choix
 
-      this.database.updateUser(0, this.player2);
-      this.database.updateInformation(0, this.tour);
+      this.database.updateUser(this.uid, this.user);
 
       // c'est au tour de Chewbaca 
       choice = this.junipergreenService.choice(choice);
@@ -121,12 +120,11 @@ export class GameComponent implements OnInit {
       // si choice vaut 0 c'est que plus rien n'est possible c'est le joueur 2 qui gagne contre Chewbaca
       if (choice == 0) {
 
-        this.player2.status = 1;
-        this.player2.choice = choice;
+        this.user.status = 1;
+        this.user.choice = choice;
 
         // mise à jour en base de données 
-        this.database.updateUser(0, this.player2);
-        this.database.updateInformation(0, this.tour);
+        this.database.updateUser(this.uid, this.user);
 
         return this.redirectStatus(); // on affiche les résultats 
       }
@@ -136,19 +134,17 @@ export class GameComponent implements OnInit {
 
       // on recalcule les valeurs possibles pour le prochain tour
       this.valid = this.junipergreenService.valid(choice);
-      this.player1.choice = choice;
+      this.chewbaca.choice = choice;
 
       this.possibles = this.junipergreenService.Possibles;
 
       // mise à jour en base de données 
-      this.database.updateUser(0, this.player1);
-      this.database.updateInformation(0, this.tour);
+      this.database.updateUser(this.uid, this.chewbaca);
 
     } else {
 
       // le joueur a-t-il perdu ? 0 oui 
       if (this.valid.length == 0) {
-
 
         return this.redirectStatus(); // on affiche les résultats 
       }
@@ -163,8 +159,6 @@ export class GameComponent implements OnInit {
 
   redirectStatus() {
 
-
-
     return this.router.navigate(['/status']);
   }
 
@@ -177,6 +171,4 @@ export class GameComponent implements OnInit {
   reset() {
     this.createForm();
   }
-
-
 }

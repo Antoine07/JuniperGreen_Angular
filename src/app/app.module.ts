@@ -19,6 +19,9 @@ import { JuniperDatabaseService } from './juniper-database.service';
 
 // http client
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from './auth.service';
+import { InscriptionComponent } from './inscription/inscription.component';
+import { ConnectionComponent } from './connection/connection.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,8 @@ import { HttpClientModule } from '@angular/common/http';
     PossiblesComponent,
     StatusComponent,
     LevelComponent,
+    InscriptionComponent,
+    ConnectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +43,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule
   ],
-  providers: [JunipergreenService, JuniperDatabaseService],
+  providers: [JunipergreenService, JuniperDatabaseService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

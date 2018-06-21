@@ -1,0 +1,21 @@
+<div class="row">
+  <h1>Connexion</h1>
+  <p *ngIf="errors">Message de l'administrateur : {{ errors }}</p>
+  <form class="col s12" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="password" type="password" class="validate" id="password" formControlName="password">
+        <label for="password">Password</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="email" type="email" class="validate" formControlName="email">
+        <label for="email">Email</label>
+      </div>
+    </div>
+    <button [disabled]="authForm.invalid" class="btn waves-effect waves-light" type="submit" name="action">Envoyer
+      <i class="material-icons right">send</i>
+    </button>
+  </form>
+</div>

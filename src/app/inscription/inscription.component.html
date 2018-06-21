@@ -1,0 +1,47 @@
+<div class="row">
+  <p *ngIf="errors">Message de l'administrateur : {{ errors }}</p>
+  <form class="col s12" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="password" type="password" class="validate" id="password" formControlName="password">
+        <label for="password">Password</label>
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+          <div *ngIf="password.errors.required">
+            Password is required.
+          </div>
+          <div *ngIf="password.errors.maxlength">
+            Votre mot de passe doit contenir au moins 6 caractères.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="email" type="email" class="validate" formControlName="email">
+        <label for="email">Email</label>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+          <div *ngIf="email.errors.required">
+            email is required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="speudo" type="text" class="validate" formControlName="pseudo">
+        <label for="email">Pseudo</label>
+        <div *ngIf="pseudo.invalid && (pseudo.dirty || pseudo.touched)" class="alert alert-danger">
+          <div *ngIf="pseudo.errors.required">
+            pseudo is required.
+          </div>
+          <div *ngIf="pseudo.errors.maxlength">
+            Votre pseudo doit contenir au moins 3 caractères.
+          </div>
+        </div>
+      </div>
+    </div>
+    <button [disabled]="authForm.invalid" class="btn waves-effect waves-light" type="submit" name="action">Envoyer
+      <i class="material-icons right">send</i>
+    </button>
+  </form>
+</div>

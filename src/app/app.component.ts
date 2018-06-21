@@ -1,5 +1,9 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+import * as firebase from 'firebase';
+import { environment } from '../environments/environment';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +13,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class AppComponent {
   title = 'app';
   levelForm: FormGroup;
+  isConnect: boolean;
+  key: string;
 
-  constructor(private elementRef:ElementRef){
-
+  constructor( private authService: AuthService) {
+    firebase.initializeApp(environment.firebase);
   }
 
   ngOnInit() {
@@ -19,6 +25,18 @@ export class AppComponent {
       'range': new FormControl('', [
       ])
     });
+
+    firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (user) {
+          this.isConnect = true;
+          this.key = user.uid; // uid de l'utilisateur sert à se repérer dans les données de l'application
+        } else {
+          this.isConnect = false;
+          this.key = null;
+        }
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -26,4 +44,7 @@ export class AppComponent {
 
   }
 
+  deconnection() {
+    this.authService.logout();
+  }
 }
