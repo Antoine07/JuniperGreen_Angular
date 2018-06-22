@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 
 import * as firebase from 'firebase';
 import { environment } from '../environments/environment';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { JuniperDatabaseService } from './juniper-database.service';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +18,13 @@ export class AppComponent {
   isConnect: boolean;
   key: string;
 
-  constructor( private authService: AuthService) {
+  uid: string;
+
+  constructor(private authService: AuthService, private router: Router, private database: JuniperDatabaseService) {
     firebase.initializeApp(environment.firebase);
+
+    if(firebase.auth().currentUser)
+      this.uid = firebase.auth().currentUser.uid;
   }
 
   ngOnInit() {
@@ -39,12 +46,13 @@ export class AppComponent {
     );
   }
 
-  ngAfterViewInit() {
-    console.log('init ... view')
-
-  }
-
   deconnection() {
     this.authService.logout();
+
+    if (this.uid)
+      this.database.resetGame(this.uid);
+
+    return this.router.navigate(['/rule']);
+
   }
 }

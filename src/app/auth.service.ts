@@ -31,13 +31,13 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string): Promise<string> {
+  login(email: string, password: string): Promise<any> {
 
     return new Promise(
       (resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password).then(
           (user) => {
-            resolve('connected');
+            resolve(user);
           },
           (error) => {
             reject(error);
@@ -86,14 +86,14 @@ export class AuthService {
   }
 
 
-  updateGame(pseudo: string, uid : string): PromiseLike<any> {
+  updateGame(pseudo: string, uid: string): PromiseLike<any> {
 
     const date = (new Date()).toDateString();
 
     return firebase.database().ref("players/" + uid).set(
       {
         "user": {
-          "pseudo": pseudo,
+          "pseudo": pseudo || 'anonymous',
           "score": 0,
           "choices": [
             0
@@ -110,7 +110,11 @@ export class AuthService {
         },
         "information": {
           "tour": 0,
-          "created": date
+          "created": date,
+          "possibles": "",
+          "choices": "",
+          "lastChoice" : 0,
+          "status" : "start"
         }
       }
     );

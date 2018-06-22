@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as firebase from 'firebase';
+import { JuniperDatabaseService } from '../juniper-database.service';
 import { User } from '../init';
-import { JunipergreenService } from '../junipergreen.service';
 
 @Component({
   selector: 'app-status',
@@ -10,23 +11,31 @@ import { JunipergreenService } from '../junipergreen.service';
 })
 export class StatusComponent implements OnInit {
 
-  player1 : User;
-  player2 : User;
+  uid: string;
+  user: User;
+  chewbaca: User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router,
+    private database: JuniperDatabaseService
+  ) {
+    this.uid = firebase.auth().currentUser.uid;
+  }
 
   ngOnInit() {
 
-    // this.player1 = new User(this.players.player1.name, this.players.player1.score);
-    // this.player2 = new User(this.players.player2.name, this.players.player2.score);
+    this.database.game(this.uid).subscribe(
+      (game) => {
+        this.user = new User(game['user']);
+        this.chewbaca = new User(game['computer']);
+      }
+    );
 
   }
 
   replay() {
-    localStorage.clear();
+    this.database.resetGame(this.uid);
 
     return this.router.navigate(['/game']);
   }

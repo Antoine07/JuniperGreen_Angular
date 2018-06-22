@@ -9,9 +9,9 @@ export class User {
     private _uid: number;
 
     public constructor(user: UserJSON) {
-        this._pseudo = user.pseudo;
+        this._pseudo = user.pseudo || 'anonymous';
         this._score = user.score;
-        this._choices = user.choices;
+        this._choices = user.choices || [];
         this._status = user.status;
     }
 

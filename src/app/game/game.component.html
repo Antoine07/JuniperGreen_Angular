@@ -1,9 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col s12 m8">
+      <p>Information sur le jeu vous avez en ce moment : {{ connected$ | async }} personne(s) connectée(s) au jeu</p>
       <h1 class="title-choice-computer">Vous devez choisir une valeur dans l'intervalle 2, et {{ Max }}</h1>
-      <h2 class="title-choice-computer">Choix de {{ player1?.name }} : {{ player1?.choice }}</h2>
-
+      <h3>Hello : {{ user?.pseudo }}</h3>
+      <h3 class="title-choice-computer">Choix de {{ chewbaca?.pseudo }} : {{ chewbaca?.choice }}</h3>
+      <br>
+      <small>Statut : {{ status }}</small>
       <div *ngIf="message">
         <p>{{ message }}</p>
       </div>

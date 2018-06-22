@@ -41,7 +41,8 @@ export class ConnectionComponent implements OnInit {
     const password = this.authForm.value['password'];
 
     this.authService.login(email, password).then(
-      () => {
+      (user) => {
+        
         this.router.navigate(['/game']);
       },
       error => {

@@ -6,7 +6,7 @@ export class JunipergreenService {
   private _Possibles: Array<number> = [];
 
   constructor() {
-    this._Possibles = Array.from(Array(Max).keys(), x => x + 1);
+    this.generatePossible();
   }
 
   possibleMultiple(num: number): Array<number> {
@@ -50,11 +50,12 @@ export class JunipergreenService {
   }
 
   remove(number: number): void | boolean {
-    let index = this.Possibles.indexOf(number);
+
+    let index = this._Possibles.indexOf(number);
 
     if (index == -1) return false;
 
-    this.Possibles.splice(index, 1);
+    this._Possibles.splice(index, 1);
   }
 
   valid(choice: number): Array<number> {
@@ -68,6 +69,12 @@ export class JunipergreenService {
 
   get Possibles(): Array<number> {
     return this._Possibles;
+  }
+
+  set Possibles(possibles: Array<number>) { this._Possibles = possibles; }
+
+  generatePossible(){
+    this._Possibles = Array.from(Array(Max).keys(), x => x + 1);
   }
 
 }

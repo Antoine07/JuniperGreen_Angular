@@ -1,10 +1,7 @@
-<div *ngIf="players">
-  <p>La partie c'est joué en {{ players.tour }}</p>
-  <div *ngIf="players.status == 1; else elseBlock" >
-    Le gagnant est : {{ player1.name }}, son score : {{ player1.score }}
+<h3>Scores :</h3>
+<div class="collection">
+    <a href="#!" class="collection-item"><span class="badge">{{ user?.score }}</span>{{ user?.pseudo }}</a>
+    <a href="#!" class="collection-item"><span class="badge">{{ chewbaca?.score }}</span>Chewbaca</a>
   </div>
-  <ng-template #elseBlock>
-      Le gagnant est : {{ player2.name }}, son score : {{ player2.score }}
-  </ng-template>
-  <button class="btn" (click)="replay()"> Rejouer ?</button>
-</div>
+
+<button class="btn" (click)="replay()"> Rejouer ?</button>
